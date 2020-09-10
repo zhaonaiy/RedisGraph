@@ -10,7 +10,7 @@
 #include "../../util/arr.h"
 #include <assert.h>
 
-QGEdge *QGEdge_New(QGNode *src, QGNode *dest, const char *relationship, const char *alias) {
+QGEdge *QGEdge_New(const char *relationship, const char *alias) {
 	QGEdge *e = rm_malloc(sizeof(QGEdge));
 	e->alias = alias;
 	e->reltypes = array_new(const char *, 1);
@@ -86,3 +86,4 @@ void QGEdge_Free(QGEdge *e) {
 
 	rm_free(e);
 }
+
