@@ -15,6 +15,7 @@ typedef enum {
 	TRAVERSE_ORDER_LAST,
 } TRAVERSE_ORDER;
 
+bool valid_position(AlgebraicExpression **exps, int pos, QueryGraph *qg);
 int score_arrangement(AlgebraicExpression **arrangement, uint exp_count, QueryGraph *qg,
 					  rax *filtered_entities, rax *bound_vars);
 
