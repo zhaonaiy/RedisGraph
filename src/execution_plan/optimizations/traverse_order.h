@@ -15,9 +15,16 @@ typedef enum {
 	TRAVERSE_ORDER_LAST,
 } TRAVERSE_ORDER;
 
-bool valid_position(AlgebraicExpression **exps, int pos, QueryGraph *qg);
-int score_arrangement(AlgebraicExpression **arrangement, uint exp_count, QueryGraph *qg,
-					  rax *filtered_entities, rax *bound_vars);
+typedef struct {
+	QueryGraph *qg;
+	rax *filtered_entities;
+	rax *bound_vars;
+	AlgebraicExpression **best_arrangement;
+	int max_score;
+} OrderScoreCtx;
+
+bool valid_position(AlgebraicExpression **exps, int pos, AlgebraicExpression *exp, QueryGraph *qg);
+int score_arrangement(OrderScoreCtx *score_ctx, AlgebraicExpression **arrangement, uint exp_count);
 
 /* Reorders exps such that exp[i] is the ith expression to evaluate. */
 void orderExpressions(
