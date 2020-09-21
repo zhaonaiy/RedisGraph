@@ -15,6 +15,7 @@ typedef enum {
 	TRAVERSE_ORDER_LAST,
 } TRAVERSE_ORDER;
 
+// TODO comment
 typedef struct {
 	QueryGraph *qg;
 	rax *filtered_entities;
@@ -23,6 +24,7 @@ typedef struct {
 	int max_score;
 } OrderScoreCtx;
 
+// TODO remove functions that don't need to be exposed, add comments for those that do.
 bool valid_position(AlgebraicExpression **exps, int pos, AlgebraicExpression *exp, QueryGraph *qg);
 int score_arrangement(OrderScoreCtx *score_ctx, AlgebraicExpression **arrangement, uint exp_count);
 

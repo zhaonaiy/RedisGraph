@@ -188,7 +188,7 @@ package: redisgraph.so
 	@mkdir -p ../build
 	@ramp pack -m "`pwd`/../ramp_manifest.yml" -v -o "../build/redisgraph.{os}-{architecture}.latest.zip" "`pwd`/redisgraph.so"
 
-test:
+test: redisgraph.so
 	# check valgrind flag is not empty
 ifneq ($(VALGRIND),)
 	# valgrind is requested, check that host's os is not Linux
