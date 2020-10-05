@@ -30,7 +30,7 @@ int score_arrangement(OrderScoreCtx *score_ctx, AlgebraicExpression **arrangemen
 
 /* Reorders exps such that exp[i] is the ith expression to evaluate. */
 void orderExpressions(
-	QueryGraph *qg,                 // QueryGraph containing expression entity data.
+	const QueryGraph *qg,           // QueryGraph containing expression entity data.
 	AlgebraicExpression **exps,     // Expressions to order.
 	uint exps_count,                // Number of expressions.
 	const FT_FilterNode *filters,   // Filters.
