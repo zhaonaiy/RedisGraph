@@ -72,10 +72,8 @@ int Schema_AddIndex(Index **idx, Schema *s, const char *field, IndexType type) {
 		GraphContext *gc = QueryCtx_GetGraphCtx();
 		Attribute_ID fieldID = GraphContext_FindOrAddAttribute(gc, field);
 		if(Index_ContainsAttribute(_idx, fieldID)) return INDEX_FAIL;
-	}
-
-	// Index doesn't exists, create it.
-	if(!_idx) {
+	} else {
+		// Index doesn't exist, create it.
 		_idx = Index_New(s->name, type);
 		if(type == IDX_FULLTEXT) s->fulltextIdx = _idx;
 		else s->index = _idx;
@@ -115,7 +113,7 @@ int Schema_RemoveIndex(Schema *s, const char *field, IndexType type) {
 	return INDEX_OK;
 }
 
-// Index node under all shcema indicies.
+// Index node under all schema indices.
 void Schema_AddNodeToIndices(const Schema *s, const Node *n) {
 	if(!s) return;
 	Index *idx = NULL;

@@ -12,7 +12,6 @@
 #include "../query_ctx.h"
 #include "../util/rmalloc.h"
 #include "../grouping/group_cache.h"
-#include "../arithmetic/aggregate.h"
 
 static void _ResultSet_ReplayStats(RedisModuleCtx *ctx, ResultSet *set) {
 	char buff[512] = {0};
@@ -160,6 +159,11 @@ ResultSet *NewResultSet(RedisModuleCtx *ctx, ResultSetFormatterType format) {
 	_ResultSet_SetColumns(set);
 
 	return set;
+}
+
+uint64_t ResultSet_RecordCount(const ResultSet *set) {
+	ASSERT(set != NULL);
+	return set->recordCount;
 }
 
 int ResultSet_AddRecord(ResultSet *set, Record r) {

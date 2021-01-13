@@ -36,6 +36,34 @@ void _AlgebraicExpression_InplaceRepurpose
 	rm_free(replacement);
 }
 
+void _AlgebraicExpression_OperationRemoveChild
+(
+	AlgebraicExpression *parent,
+	const AlgebraicExpression *child
+) {
+	ASSERT(parent != NULL);
+	ASSERT(child != NULL);
+
+	if(parent->type != AL_OPERATION) return;
+
+	uint child_count = AlgebraicExpression_ChildCount(parent);
+	// no child nodes to remove
+	if(child_count == 0) return;
+
+	// search for child in parent
+	for(uint i = 0; i < child_count; i++) {
+		if(parent->operation.children[i] != child) continue;
+
+		// child found, remove it
+		// shift-left following children
+		for(uint j = i; j < child_count - 1; j++) {
+			parent->operation.children[j] = parent->operation.children[j+1];
+		}
+		array_pop(parent->operation.children);
+		break;
+	}
+}
+
 // Removes the rightmost direct child node of root.
 AlgebraicExpression *_AlgebraicExpression_OperationRemoveDest
 (
@@ -235,8 +263,8 @@ static void _AlgebraicExpression_PopulateTransposedOperand(AlgebraicExpression *
 														   const GraphContext *gc) {
 	// Swap the row and column domains of the operand.
 	const char *tmp = operand->operand.dest;
-	operand->operand.src = operand->operand.dest;
-	operand->operand.dest = tmp;
+	operand->operand.dest = operand->operand.src;
+	operand->operand.src = tmp;
 
 	// Diagonal matrices do not need to be transposed.
 	if(operand->operand.diagonal == true) return;
@@ -265,7 +293,9 @@ void _AlgebraicExpression_PopulateOperands(AlgebraicExpression *root, const Grap
 	case AL_OPERATION:
 		child_count = AlgebraicExpression_ChildCount(root);
 		// If we are maintaining transposed matrices, it can be retrieved now.
-		if(root->operation.op == AL_EXP_TRANSPOSE && Config_MaintainTranspose()) {
+		bool maintain_transpose = false;
+		Config_Option_get(Config_MAINTAIN_TRANSPOSE, &maintain_transpose);
+		if(root->operation.op == AL_EXP_TRANSPOSE && maintain_transpose) {
 			ASSERT(child_count == 1 && "Transpose operation had invalid number of children");
 			AlgebraicExpression *child = _AlgebraicExpression_OperationRemoveDest(root);
 			// Fetch the transposed matrix and update the operand.
